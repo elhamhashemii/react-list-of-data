@@ -1,0 +1,20 @@
+.container {
+  margin: 1rem auto;
+  padding: 2rem 6rem;
+}
+
+.App h1 {
+  margin-bottom: 3rem;
+  margin: 0 !important;
+  padding: 1rem;
+  background-color: #020b0a;
+  color: #fff;
+}
+
+.center {
+  text-align: center;
+}
+
+.margin-tb {
+  margin: 1.5rem 0;
+}
