@@ -4,10 +4,10 @@ import { usersData } from "../data/users";
 
 const UsersContext = React.createContext({
   users: [],
-  onEditUser: (user) => {},
+  onEditUser: (user, updatedUser) => {},
   onRemoveUser: (user) => {},
   onAddUser: (user) => {},
-  onFilterUser: (filter, isEmpty) => {},
+  onFilterUser: (filter) => {},
 });
 
 export default UsersContext;
@@ -17,19 +17,16 @@ function usersListReducer(state, action) {
   if (action.type === "EDIT") {
     updatedList = [...state];
     const editedUserIndex = updatedList.findIndex(
-      (item) => item.id === action.item.id
+      (item) => item.id === action.item.user.id
     );
     updatedList[editedUserIndex] = {
-      // THE UPDATED DATA SHOULD BE REPLACED HERE
-      id: 333,
-      name: "elham",
-      username: "ELHUISHIUD",
-      website: "dddddddd",
-      company: { name: "dddd" },
-      phone: "dddddddd",
-      zipcode: "dddddddd",
-      address: "dddddddd",
-      email: "dddddddd",
+      id: action.item.user.id,
+      name: action.item.updatedUser.name,
+      username: action.item.updatedUser.username,
+      website: action.item.updatedUser.website,
+      phone: action.item.updatedUser.phone,
+      email: action.item.updatedUser.email,
+      gender: action.item.updatedUser.gender,
     };
     return updatedList;
   } else if (action.type === "REMOVE") {
@@ -46,28 +43,21 @@ function usersListReducer(state, action) {
       name: action.item.name,
       username: action.item.username,
       email: action.item.email,
-      address: { city: action.item.address, zipcode: action.item.zipcode },
       website: action.item.website,
-      company: { name: action.item.name },
       phone: action.item.phone,
+      gender: action.item.gender,
     };
     updatedList.push(addedUser);
     return updatedList;
   } else if (action.type === "FILTER") {
-    if (action.item.isEmpty) {
-      const initialArr = [...usersData];
-      console.log("EMPTY >>>", state);
-      return initialArr;
-    } else {
-      updatedList = [...state];
-      const updatedItem = action.item.filter;
-      const filteredArray = updatedList.filter((obj) =>
-        Object.keys(updatedItem).some((key) =>
-          obj[key].includes(updatedItem[key])
-        )
-      );
-      return filteredArray;
-    }
+    updatedList = [...usersData];
+    const filteredItem = action.item;
+    const filteredArray = updatedList.filter((obj) =>
+      Object.keys(filteredItem).some((key) =>
+        obj[key].toUpperCase().includes(filteredItem[key].toUpperCase())
+      )
+    );
+    return filteredArray;
   }
   return state;
 }
@@ -78,8 +68,8 @@ export function UsersContextProvider(props) {
     usersData
   );
 
-  function EditUserHandler(user) {
-    dispatchUsersList({ type: "EDIT", item: user });
+  function EditUserHandler(user, updatedUser) {
+    dispatchUsersList({ type: "EDIT", item: { user, updatedUser } });
   }
   function RemoveUserHandler(user) {
     dispatchUsersList({ type: "REMOVE", item: user });
@@ -87,8 +77,8 @@ export function UsersContextProvider(props) {
   function AddUserHandler(user) {
     dispatchUsersList({ type: "ADD", item: user });
   }
-  function filterUserHandler(filter, isEmpty) {
-    dispatchUsersList({ type: "FILTER", item: { filter, isEmpty } });
+  function filterUserHandler(filter) {
+    dispatchUsersList({ type: "FILTER", item: filter });
   }
 
   return (

@@ -1,5 +1,6 @@
 export const usersData = [
   {
+    "gender" : "male",
     "id": 1,
     "name": "Leanne Graham",
     "username": "Bret",
@@ -23,6 +24,7 @@ export const usersData = [
     }
   },
   {
+    "gender" : "female",
     "id": 2,
     "name": "Ervin Howell",
     "username": "Antonette",
@@ -46,6 +48,7 @@ export const usersData = [
     }
   },
   {
+    "gender" : "female",
     "id": 3,
     "name": "Clementine Bauch",
     "username": "Samantha",
@@ -69,6 +72,7 @@ export const usersData = [
     }
   },
   {
+    "gender" : "female",
     "id": 4,
     "name": "Patricia Lebsack",
     "username": "Karianne",
@@ -92,6 +96,7 @@ export const usersData = [
     }
   },
   {
+    "gender" : "male",
     "id": 5,
     "name": "Chelsey Dietrich",
     "username": "Kamren",
@@ -115,6 +120,7 @@ export const usersData = [
     }
   },
   {
+    "gender" : "female",
     "id": 6,
     "name": "Mrs. Dennis Schulist",
     "username": "Leopoldo_Corkery",
@@ -138,6 +144,7 @@ export const usersData = [
     }
   },
   {
+    "gender" : "male",
     "id": 7,
     "name": "Kurtis Weissnat",
     "username": "Elwyn.Skiles",
@@ -161,6 +168,7 @@ export const usersData = [
     }
   },
   {
+    "gender" : "male",
     "id": 8,
     "name": "Nicholas Runolfsdottir V",
     "username": "Maxime_Nienow",
@@ -184,6 +192,7 @@ export const usersData = [
     }
   },
   {
+    "gender" : "other",
     "id": 9,
     "name": "Glenna Reichert",
     "username": "Delphine",
@@ -207,6 +216,7 @@ export const usersData = [
     }
   },
   {
+    "gender" : "male",
     "id": 10,
     "name": "Clementina DuBuque",
     "username": "Moriah.Stanton",

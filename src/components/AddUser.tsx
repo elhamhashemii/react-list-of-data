@@ -15,7 +15,6 @@ function AddUser(props) {
 
   return (
     <>
-      <Divider orientation="left" orientationMargin="0" />
       <Button
         type="primary"
         icon={<PlusOutlined />}

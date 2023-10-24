@@ -1,30 +1,41 @@
-import { Table, Button, Popconfirm } from "antd";
+import { Table, Button, Popconfirm, Tag, notification } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { useContext, useState } from "react";
 import UsersContext from "../context/UsersContext";
 import AppModal from "./AppModal";
+import type { NotificationPlacement } from "antd/es/notification/interface";
 
 const UsersList = (props) => {
   const usersCtx = useContext(UsersContext);
   const [showModal, setShowModal] = useState(false);
+  const [fieldValues, setFieldValues] = useState(null);
   const handleDelete = (record: any) => {
     usersCtx.onRemoveUser(record);
+    openNotification("top", record);
   };
 
-  function toggleModal() {
+  const handleEdit = (record: any) => {
+    setFieldValues(record);
+    setShowModal(true);
+  };
+
+  function submitEditModal(values) {
+    usersCtx.onEditUser(fieldValues, values);
     setShowModal(!showModal);
   }
 
-  const handleEdit = (record: any) => {
-    setShowModal(true);
-    console.log(record);
-    // HERE, you shouldnt pass the selected record
-    // 1. Open a Modal
-    // 2. Get new Values
-    // 3. OnSubmit, pass new values to context
-    // 4. In context, you can replace incoming userData with the previous
-    // usersCtx.onEditUser(record);
-    // props.onEdit(record)
+  const [api, contextHolder] = notification.useNotification();
+
+  const openNotification = (placement: NotificationPlacement, record: any) => {
+    api.info({
+      message: `User Removed!`,
+      description: (
+        <div>
+          You deleted <b>{record.name}</b> from list.
+        </div>
+      ),
+      placement,
+    });
   };
 
   const columns: ColumnsType<any> = [
@@ -32,12 +43,12 @@ const UsersList = (props) => {
       title: "",
       dataIndex: "id",
       key: "id",
+      align: "center",
     },
     {
       title: "Name",
       dataIndex: "name",
       key: "name",
-      render: (text: string) => <a>{text}</a>,
     },
     {
       title: "Email",
@@ -48,13 +59,8 @@ const UsersList = (props) => {
       title: "Website",
       key: "website",
       dataIndex: "website",
+      render: (text: string) => <a href={text}>{text}</a>,
     },
-    // {
-    //   title: "Company",
-    //   key: "company",
-    //   dataIndex: "company",
-    //   render: (company: { name: string }) => <div>{company.name}</div>,
-    // },
     {
       title: "Phone",
       key: "phone",
@@ -65,26 +71,30 @@ const UsersList = (props) => {
       key: "username",
       dataIndex: "username",
     },
-    // {
-    //   title: "Address",
-    //   key: "address",
-    //   dataIndex: "address",
-    //   render: (address: { street: string; suite: string; city: string }) => (
-    //     <div>
-    //       {address.city}, {address.street}, {address.suite}
-    //     </div>
-    //   ),
-    // },
-    // {
-    //   title: "Zip Code",
-    //   key: "address",
-    //   dataIndex: "address",
-    //   render: (address: { zipcode: string }) => <div>{address.zipcode}</div>,
-    // },
+    {
+      title: "Gender",
+      key: "gender",
+      dataIndex: "gender",
+      align: "center",
+      render: (gender: string) => (
+        <Tag
+          color={
+            gender === "male"
+              ? "blue"
+              : gender === "female"
+              ? "magenta"
+              : "success"
+          }
+        >
+          {gender}
+        </Tag>
+      ),
+    },
     {
       title: "",
       dataIndex: "id",
       key: "id",
+      align: "center",
       render: (index, record) => (
         <Button
           onClick={(e) => {
@@ -98,6 +108,7 @@ const UsersList = (props) => {
     {
       title: "",
       dataIndex: "",
+      align: "center",
       render: (_, record) => (
         <Popconfirm
           title="Sure to delete?"
@@ -108,16 +119,19 @@ const UsersList = (props) => {
       ),
     },
   ];
+
   return (
     <>
       <AppModal
         type="edit"
         open={showModal}
-        onSubmit={toggleModal}
+        onSubmit={submitEditModal}
         onCancel={() => {
           setShowModal(false);
         }}
+        userFieldValues={fieldValues}
       />
+      {contextHolder}
       <Table
         columns={columns}
         dataSource={usersCtx.users}

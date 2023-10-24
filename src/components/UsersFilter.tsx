@@ -1,6 +1,5 @@
 import { useContext } from "react";
-import { Input, Flex, Form, Button } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
+import { Input, Flex, Form } from "antd";
 import classes from "./UsersFilter.module.css";
 import UsersContext from "../context/UsersContext";
 import debounce from "lodash/debounce";
@@ -11,13 +10,10 @@ const UsersFilter = () => {
   const [form] = Form.useForm();
 
   function filterHandler(changed, all) {
-    const emptyFields = Object.values(all).every(
-      (key) => key === undefined || key === ""
-    );
     Object.keys(all).forEach(
       (key) => all[key] === undefined && delete all[key]
     );
-    usersCtx.onFilterUser(all, emptyFields);
+    usersCtx.onFilterUser(all);
   }
 
   return (
@@ -27,7 +23,7 @@ const UsersFilter = () => {
         className={classes.container}
         onValuesChange={debounce(
           (changes, all) => filterHandler(changes, all),
-          2000
+          1000
         )}
       >
         <Flex align="center" gap="large" wrap="wrap">
@@ -43,14 +39,6 @@ const UsersFilter = () => {
           <Form.Item style={{ marginBottom: "0px" }} name="phone">
             <Input placeholder="Phone number" />
           </Form.Item>
-
-          <Button
-            htmlType="submit"
-            shape="circle"
-            type="primary"
-            // loading={isLoading}
-            icon={<SearchOutlined />}
-          />
         </Flex>
       </Form>
     </>
