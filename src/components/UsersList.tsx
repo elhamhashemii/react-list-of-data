@@ -7,8 +7,6 @@ import AppModal from "./AppModal";
 const UsersList = (props) => {
   const usersCtx = useContext(UsersContext);
   const [showModal, setShowModal] = useState(false);
-  const [formData, setFormData] = useState(null);
-
   const handleDelete = (record: any) => {
     usersCtx.onRemoveUser(record);
   };
@@ -19,8 +17,7 @@ const UsersList = (props) => {
 
   const handleEdit = (record: any) => {
     setShowModal(true);
-    setFormData(record);
-    console.log(formData);
+    console.log(record);
     // HERE, you shouldnt pass the selected record
     // 1. Open a Modal
     // 2. Get new Values
@@ -52,12 +49,12 @@ const UsersList = (props) => {
       key: "website",
       dataIndex: "website",
     },
-    {
-      title: "Company",
-      key: "company",
-      dataIndex: "company",
-      render: (company: { name: string }) => <div>{company.name}</div>,
-    },
+    // {
+    //   title: "Company",
+    //   key: "company",
+    //   dataIndex: "company",
+    //   render: (company: { name: string }) => <div>{company.name}</div>,
+    // },
     {
       title: "Phone",
       key: "phone",
@@ -66,24 +63,24 @@ const UsersList = (props) => {
     {
       title: "Username",
       key: "username",
-      dataIndex: "website",
+      dataIndex: "username",
     },
-    {
-      title: "Address",
-      key: "address",
-      dataIndex: "address",
-      render: (address: { street: string; suite: string; city: string }) => (
-        <div>
-          {address.city}, {address.street}, {address.suite}
-        </div>
-      ),
-    },
-    {
-      title: "Zip Code",
-      key: "address",
-      dataIndex: "address",
-      render: (address: { zipcode: string }) => <div>{address.zipcode}</div>,
-    },
+    // {
+    //   title: "Address",
+    //   key: "address",
+    //   dataIndex: "address",
+    //   render: (address: { street: string; suite: string; city: string }) => (
+    //     <div>
+    //       {address.city}, {address.street}, {address.suite}
+    //     </div>
+    //   ),
+    // },
+    // {
+    //   title: "Zip Code",
+    //   key: "address",
+    //   dataIndex: "address",
+    //   render: (address: { zipcode: string }) => <div>{address.zipcode}</div>,
+    // },
     {
       title: "",
       dataIndex: "id",

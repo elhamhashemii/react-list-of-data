@@ -1,11 +1,13 @@
-import React, { useReducer, useState } from "react";
+import React, { useReducer } from "react";
 import { usersData } from "../data/users";
+// const _ = require("lodash");
 
 const UsersContext = React.createContext({
   users: [],
   onEditUser: (user) => {},
   onRemoveUser: (user) => {},
   onAddUser: (user) => {},
+  onFilterUser: (filter, isEmpty) => {},
 });
 
 export default UsersContext;
@@ -14,7 +16,6 @@ function usersListReducer(state, action) {
   let updatedList;
   if (action.type === "EDIT") {
     updatedList = [...state];
-    const editedUser = { ...action.item };
     const editedUserIndex = updatedList.findIndex(
       (item) => item.id === action.item.id
     );
@@ -45,16 +46,28 @@ function usersListReducer(state, action) {
       name: action.item.name,
       username: action.item.username,
       email: action.item.email,
-      //   address: `${action.item.address.city},${action.item.address.street},${action.item.address.suite}`,
       address: { city: action.item.address, zipcode: action.item.zipcode },
       website: action.item.website,
       company: { name: action.item.name },
       phone: action.item.phone,
-      //   zipcode: { zipcode: action.item.zipcode },
     };
     updatedList.push(addedUser);
-    console.log(updatedList);
     return updatedList;
+  } else if (action.type === "FILTER") {
+    if (action.item.isEmpty) {
+      const initialArr = [...usersData];
+      console.log("EMPTY >>>", state);
+      return initialArr;
+    } else {
+      updatedList = [...state];
+      const updatedItem = action.item.filter;
+      const filteredArray = updatedList.filter((obj) =>
+        Object.keys(updatedItem).some((key) =>
+          obj[key].includes(updatedItem[key])
+        )
+      );
+      return filteredArray;
+    }
   }
   return state;
 }
@@ -74,6 +87,9 @@ export function UsersContextProvider(props) {
   function AddUserHandler(user) {
     dispatchUsersList({ type: "ADD", item: user });
   }
+  function filterUserHandler(filter, isEmpty) {
+    dispatchUsersList({ type: "FILTER", item: { filter, isEmpty } });
+  }
 
   return (
     <UsersContext.Provider
@@ -82,6 +98,7 @@ export function UsersContextProvider(props) {
         onEditUser: EditUserHandler,
         onRemoveUser: RemoveUserHandler,
         onAddUser: AddUserHandler,
+        onFilterUser: filterUserHandler,
       }}
     >
       {props.children}

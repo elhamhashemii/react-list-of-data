@@ -10,7 +10,6 @@ function AddUser(props) {
 
   const onCreate = (values: any) => {
     usersCtx.onAddUser(values);
-    console.log("Received values of form: ", values);
     setOpen(false);
   };
 

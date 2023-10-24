@@ -32,7 +32,7 @@ const AppModal: React.FC<CollectionCreateFormProps> = ({
             onSubmit(values);
           })
           .catch((info) => {
-            console.log("Validate Failed:", info);
+            console.error("Validate Failed:", info);
           });
       }}
     >
@@ -72,32 +72,11 @@ const AppModal: React.FC<CollectionCreateFormProps> = ({
           <Input placeholder="Website" />
         </Form.Item>
         <Form.Item
-          label="Company"
-          name="company"
-          rules={[{ required: true, message: "Please input your Company!" }]}
-        >
-          <Input placeholder="Company" />
-        </Form.Item>
-        <Form.Item
           label="Phone"
           name="phone"
           rules={[{ required: true, message: "Please input your Phone!" }]}
         >
           <Input placeholder="Phone" />
-        </Form.Item>
-        <Form.Item
-          label="Address"
-          name="address"
-          rules={[{ required: true, message: "Please input your Address!" }]}
-        >
-          <Input placeholder="Address" />
-        </Form.Item>
-        <Form.Item
-          label="Zip Code"
-          name="zipcode"
-          rules={[{ required: true, message: "Please input your Zip Code!" }]}
-        >
-          <Input placeholder="Zip Code" />
         </Form.Item>
       </Form>
       <Divider orientation="left" />

@@ -1,43 +1,54 @@
-import { useState } from "react";
+import { useContext } from "react";
 import { Input, Flex, Form, Button } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import classes from "./UsersFilter.module.css";
+import UsersContext from "../context/UsersContext";
+import debounce from "lodash/debounce";
 
 const UsersFilter = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const usersCtx = useContext(UsersContext);
 
-  function onSubmitHandler(event: any) {
-    event.preventDefault();
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1500);
+  const [form] = Form.useForm();
+
+  function filterHandler(changed, all) {
+    const emptyFields = Object.values(all).every(
+      (key) => key === undefined || key === ""
+    );
+    Object.keys(all).forEach(
+      (key) => all[key] === undefined && delete all[key]
+    );
+    usersCtx.onFilterUser(all, emptyFields);
   }
 
   return (
     <>
-      <Form className={classes.container} onSubmitCapture={onSubmitHandler}>
+      <Form
+        form={form}
+        className={classes.container}
+        onValuesChange={debounce(
+          (changes, all) => filterHandler(changes, all),
+          2000
+        )}
+      >
         <Flex align="center" gap="large" wrap="wrap">
-          <Form.Item style={{ marginBottom: "0px" }} name="username">
+          <Form.Item style={{ marginBottom: "0px" }} name="name">
             <Input placeholder="Name" />
-          </Form.Item>
-          <Form.Item style={{ marginBottom: "0px" }} name="company">
-            <Input placeholder="Company" />
           </Form.Item>
           <Form.Item style={{ marginBottom: "0px" }} name="email">
             <Input placeholder="Email" />
           </Form.Item>
+          <Form.Item style={{ marginBottom: "0px" }} name="website">
+            <Input placeholder="Website" />
+          </Form.Item>
           <Form.Item style={{ marginBottom: "0px" }} name="phone">
             <Input placeholder="Phone number" />
           </Form.Item>
-          <Form.Item style={{ marginBottom: "0px" }} name="address">
-            <Input placeholder="Address" />
-          </Form.Item>
+
           <Button
             htmlType="submit"
             shape="circle"
             type="primary"
-            loading={isLoading}
+            // loading={isLoading}
             icon={<SearchOutlined />}
           />
         </Flex>
