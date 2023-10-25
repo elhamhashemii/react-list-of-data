@@ -1,7 +1,6 @@
 import React, { useReducer } from "react";
 import { usersData } from "../data/users";
-// const _ = require("lodash");
-
+import _ from "lodash";
 const UsersContext = React.createContext({
   users: [],
   onEditUser: (user, updatedUser) => {},
@@ -51,13 +50,24 @@ function usersListReducer(state, action) {
     return updatedList;
   } else if (action.type === "FILTER") {
     updatedList = [...usersData];
-    const filteredItem = action.item;
-    const filteredArray = updatedList.filter((obj) =>
-      Object.keys(filteredItem).some((key) =>
-        obj[key].toUpperCase().includes(filteredItem[key].toUpperCase())
-      )
-    );
-    return filteredArray;
+    const filteredObjects = [];
+    for (const obj of updatedList) {
+      if (
+        obj.name?.toUpperCase().includes(action.item.name?.toUpperCase()) ||
+        obj.username
+          ?.toUpperCase()
+          .includes(action.item.username?.toUpperCase()) ||
+        obj.email?.toUpperCase().includes(action.item.email?.toUpperCase()) ||
+        obj.website
+          ?.toUpperCase()
+          .includes(action.item.website?.toUpperCase()) ||
+        obj.phone?.toUpperCase().includes(action.item.phone?.toUpperCase()) ||
+        obj.gender === action.item.gender
+      ) {
+        filteredObjects.push(obj);
+      }
+    }
+    return filteredObjects;
   }
   return state;
 }

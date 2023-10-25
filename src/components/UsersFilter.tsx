@@ -1,48 +1,33 @@
-import { useContext } from "react";
-import { Input, Flex, Form } from "antd";
-import classes from "./UsersFilter.module.css";
+import { Button } from "antd";
+import AppModal from "./AppModal";
+import { useContext, useState } from "react";
 import UsersContext from "../context/UsersContext";
-import debounce from "lodash/debounce";
 
-const UsersFilter = () => {
+function UsersFilter(props) {
+  const [showModal, setShowModal] = useState(false);
   const usersCtx = useContext(UsersContext);
 
-  const [form] = Form.useForm();
-
-  function filterHandler(changed, all) {
-    Object.keys(all).forEach(
-      (key) => all[key] === undefined && delete all[key]
+  function submitFilterModal(values: any) {
+    setShowModal(false);
+    Object.keys(values).forEach(
+      (key) => values[key] === undefined && delete values[key]
     );
-    usersCtx.onFilterUser(all);
+    usersCtx.onFilterUser(values);
   }
-
   return (
     <>
-      <Form
-        form={form}
-        className={classes.container}
-        onValuesChange={debounce(
-          (changes, all) => filterHandler(changes, all),
-          1000
-        )}
-      >
-        <Flex align="center" gap="large" wrap="wrap">
-          <Form.Item style={{ marginBottom: "0px" }} name="name">
-            <Input placeholder="Name" />
-          </Form.Item>
-          <Form.Item style={{ marginBottom: "0px" }} name="email">
-            <Input placeholder="Email" />
-          </Form.Item>
-          <Form.Item style={{ marginBottom: "0px" }} name="website">
-            <Input placeholder="Website" />
-          </Form.Item>
-          <Form.Item style={{ marginBottom: "0px" }} name="phone">
-            <Input placeholder="Phone number" />
-          </Form.Item>
-        </Flex>
-      </Form>
+      <Button onClick={() => setShowModal(true)}>Filter</Button>
+      <Button onClick={() => window.location.reload()}>Reset</Button>
+      <AppModal
+        type="filter"
+        open={showModal}
+        onSubmit={submitFilterModal}
+        onCancel={() => {
+          setShowModal(false);
+        }}
+      ></AppModal>
     </>
   );
-};
+}
 
 export default UsersFilter;

@@ -133,6 +133,7 @@ const UsersList = (props) => {
       />
       {contextHolder}
       <Table
+        loading={props.loading}
         columns={columns}
         dataSource={usersCtx.users}
         title={props.header}

@@ -2,7 +2,7 @@ import { Divider, Form, Input, Modal, Radio } from "antd";
 
 interface CollectionCreateFormProps {
   open: boolean;
-  type: "add" | "edit";
+  type: "add" | "edit" | "filter";
   onSubmit: (values: any) => void;
   onCancel: () => void;
   userFieldValues?: any;
@@ -17,8 +17,15 @@ const AppModal: React.FC<CollectionCreateFormProps> = ({
 }) => {
   const [form] = Form.useForm();
   form.setFieldsValue(userFieldValues);
-  const title = type === "add" ? "Add A New User" : "Edit User";
-  const submitText = type === "add" ? "Add" : "Update";
+  const title =
+    type === "add"
+      ? "Add A New User"
+      : type === "edit"
+      ? "Edit User"
+      : "Filter Users";
+  const submitText =
+    type === "add" ? "Add" : type === "edit" ? "Update" : "Filter";
+  const fieldIsRequired = type === "filter" ? false : true;
   return (
     <Modal
       style={{ top: 20 }}
@@ -49,42 +56,60 @@ const AppModal: React.FC<CollectionCreateFormProps> = ({
         <Form.Item
           label="Name"
           name="name"
-          rules={[{ required: true, message: "Please input your name!" }]}
+          rules={[
+            { required: fieldIsRequired, message: "Please input your name!" },
+          ]}
         >
           <Input placeholder="Name" type="text" />
         </Form.Item>
         <Form.Item
           label="UserName"
           name="username"
-          rules={[{ required: true, message: "Please input your username!" }]}
+          rules={[
+            {
+              required: fieldIsRequired,
+              message: "Please input your username!",
+            },
+          ]}
         >
           <Input placeholder="User Name" type="text" />
         </Form.Item>
         <Form.Item
           label="Email"
           name="email"
-          rules={[{ required: true, message: "Please input your Email!" }]}
+          rules={[
+            { required: fieldIsRequired, message: "Please input your Email!" },
+          ]}
         >
           <Input placeholder="Email" type="email" />
         </Form.Item>
         <Form.Item
           label="Website"
           name="website"
-          rules={[{ required: true, message: "Please input your Website!" }]}
+          rules={[
+            {
+              required: fieldIsRequired,
+              message: "Please input your Website!",
+            },
+          ]}
         >
           <Input placeholder="Website" type="url" />
         </Form.Item>
         <Form.Item
           label="Phone"
           name="phone"
-          rules={[{ required: true, message: "Please input your Phone!" }]}
+          rules={[
+            { required: fieldIsRequired, message: "Please input your Phone!" },
+          ]}
         >
           <Input placeholder="Phone" type="tell" />
         </Form.Item>
         <Form.Item
           label="Gender"
           name="gender"
-          rules={[{ required: true, message: "Please add your gender!" }]}
+          rules={[
+            { required: fieldIsRequired, message: "Please add your gender!" },
+          ]}
         >
           <Radio.Group>
             <Radio value="male">Male</Radio>

@@ -7,6 +7,7 @@ import { UsersContextProvider } from "./context/UsersContext";
 import { useState } from "react";
 function App() {
   const [showModal, setShowModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   function toggleModalHandler() {
     setShowModal(!showModal);
   }
@@ -20,9 +21,10 @@ function App() {
             Users List
           </Divider>
           <UsersList
+            loading={isLoading}
             header={() => (
               <Flex gap="middle" align="center" wrap="wrap">
-                <div>Filter users</div> <UsersFilter />
+                <UsersFilter />
               </Flex>
             )}
             footer={() => <AddUser onClick={toggleModalHandler} />}
